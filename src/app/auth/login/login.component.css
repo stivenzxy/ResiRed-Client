@@ -1,0 +1,53 @@
+.container {
+    display: flex;
+    position: absolute;
+    min-height: 100%;
+    padding: 2rem;
+    min-width: 100%;
+    justify-content: center; /* centrar horizontalmente */
+    align-items: center; /* centrar verticalmente */
+    background-image: linear-gradient(to right top, #2f4858, #466371, #60808a, #7c9da3, #9abbbd);
+    
+}
+
+.login-container {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    background-color: #FFFFFF;
+    height: 500px;
+    width: 850px;
+    border-radius: .5rem;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.35) 3px 3px 5px;
+}
+
+.left-container, .right-container {
+    height: 100%;
+}
+
+.left-container {
+    width: 45%;
+    background-color: #FFFFFF;
+}
+
+.right-container {
+    width: 55%;
+    background-image: url('../../../assets/imgs/login-Wallpaper.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+@media (max-width: 640px) {
+    .login-container {
+        flex-direction: column;
+    }
+
+    .right-container {
+        display: none;
+    }
+
+    .left-container {
+        width: 100%;
+    }
+}

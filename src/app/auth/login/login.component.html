@@ -1,0 +1,44 @@
+<section class="container">
+    <div class="login-container">
+      <div class="left-container p-14">
+        <div class="logo flex absolute top-2 left-2 w-16 h-16">
+          <img src="../../../assets/imgs/ResiRed2.png" class="rounded aspect-video" alt="logo">
+        </div>
+  
+        <form [formGroup]="loginForm" class="w-full bg-white rounded relative px-4 pt-2 pb-8 mb-4 mt-24" (ngSubmit)="submitLoginData()">
+  
+          <div class="login-title absolute text-[20px] -top-16 w-full">
+            <h2 class="hello-text text-[#2F4858] font-normal">Hola,</h2>
+            <h2 class="welcome-text text-[#2F4858] font-medium truncate">Bienvenido a ResiRed!</h2>
+          </div>
+  
+          <div class="mb-4">
+            <label for="username" class="block text-gray-700 text-sm font-medium mb-2">Usuario</label>
+            <input type="text" id="username" formControlName="username" name="username" class="shadow appearance-none border rounded w-full py-2 px-3 bg-[#2F4858] text-white
+                      focus:outline-none focus:ring-1 focus:ring-slate-800" placeholder="Nombre de usuario" required>
+          </div>
+          <div class="mb-6">
+            <label for="password" class="block text-gray-700 text-sm font-medium mb-2">Contraseña</label>
+            <input formControlName="password" [type]="hidePassword ? 'password' : 'text'" id="password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-white mb-3 bg-[#2F4858]
+                      focus:outline-none focus:ring-1 focus:ring-slate-800" placeholder="Contraseña" required>
+            <div class="flex items-center justify-center">
+              <input (click)="togglePasswordVisibility()" type="checkbox" id="show-password" class="mr-2" name="showPassword" aria-label="Mostrar Contraseña">
+              <label for="show-password" class="text-sm text-gray-700 truncate">Mostrar contraseña</label>
+            </div>
+          </div>
+          <div class="flex items-center justify-center">
+            <button type="submit"
+              class="bg-[#355B59] hover:bg-[#0a3230] text-white font-normal py-2 px-4 rounded truncate focus:outline-none focus:shadow-outline">
+              Iniciar sesión
+            </button>
+          </div>
+  
+          <div class="flex items-center justify-center mt-8 text-sm">
+            <a class="cursor-pointer hover:text-[#2F4858] truncate" (click)="rememberPassword()">¿Olvidaste tu
+              contraseña?</a>
+          </div>
+        </form>
+      </div>
+      <div class="right-container"></div>
+    </div>
+  </section>
