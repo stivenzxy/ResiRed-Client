@@ -15,3 +15,12 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   background: #ffffff;
 }
+
+/* Control de estados en forms */
+.ng-valid:not(form).ng-touched {
+    border-left: 5px solid #42A948;
+}
+
+.ng-invalid:not(form).ng-touched {
+    border-left: 5px solid #a94442;
+}

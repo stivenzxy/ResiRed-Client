@@ -1,1 +1,13 @@
-<p>dashboard works!</p>
+<section class="main-content flex justify-center items-center flex-col">
+    <h1 class="text-slate-800 font-bold">Bienvenido al dashboard</h1>
+    <button (click)="logout()" class="p-8 bg-cyan-600 hover:bg-cyan-900 text-white rounded-lg">Cerrar Sesión</button>
+   
+
+    <div class="data-user mt-10 font-bold">
+        <h2>Nombre de usuario</h2><b class="text-slate-800">{{user?.username + ' ' + user?.lastname}}</b>
+        <h2>Correo</h2><b class="text-slate-800">{{user?.email}}</b>
+        <h2>Direccion</h2><b class="text-slate-800">{{user?.address}}</b>
+        <h2>Exp</h2><b class="text-slate-800">{{user?.exp}}</b>
+    </div>
+</section>
+

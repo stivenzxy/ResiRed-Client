@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2'
+import { LoginService } from '../../services/auth/login.service';
+import { LoginRequest } from '../../services/auth/loginRequest';
 
 
 @Component({
@@ -18,10 +20,10 @@ export class LoginComponent implements OnInit{
 
   hidePassword = true;
 
-  constructor(private formBuilder : FormBuilder, private router: Router) { 
+  constructor(private formBuilder : FormBuilder, private router: Router, private loginService : LoginService) { 
     this.loginForm = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$')]]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
     })
   }
 
@@ -33,21 +35,55 @@ export class LoginComponent implements OnInit{
     this.hidePassword = !this.hidePassword;
   }
 
+  get email(){
+    return this.loginForm.controls['email'];
+  }
+
+  get password(){
+    return this.loginForm.controls['password'];
+  }
+
   submitLoginData(){
     if(this.loginForm.valid){
       console.log('redirijir al servicio')
-      this.router.navigateByUrl('/dashboard');
-      this.loginForm.reset();
+      this.loginService.login(this.loginForm.value as LoginRequest).subscribe({
+        next: (userData) => {
+          console.log(userData);
+        },
+        error: (errorData) => {
+          console.error(errorData);
+          Swal.fire({
+            toast: true,
+            position: 'top-right',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            icon: 'error',
+            title: 'Oops...',
+            text: errorData.message,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+        },
+        complete: () => {
+          console.info("Login completo");
+          this.router.navigate(['dashboard'], { replaceUrl: true });
+          //this.loginForm.reset();
+        }
+      })
     } else {
+      this.loginForm.markAllAsTouched();
+
       Swal.fire({
         toast: true,
-        position: 'top-end',
+        position: 'top-right',
         showConfirmButton: false,
         timer: 3000, // Duración del toast en milisegundos
         timerProgressBar: true,
         icon: 'error',
-        title: 'Error',
-        text: 'Por favor ingresa datos en el form',
+        title: 'Correo o contraseña incorrectos',
         didOpen: (toast) => {
           toast.addEventListener('mouseenter', Swal.stopTimer)
           toast.addEventListener('mouseleave', Swal.resumeTimer)
@@ -60,3 +96,4 @@ export class LoginComponent implements OnInit{
     
   }
 }
+

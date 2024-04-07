@@ -1,7 +1,7 @@
 .container {
     display: flex;
     position: absolute;
-    min-height: 100%;
+    min-height: 100vh;
     padding: 2rem;
     min-width: 100%;
     justify-content: center; /* centrar horizontalmente */
@@ -31,11 +31,13 @@
     background-color: #FFFFFF;
 }
 
+
 .right-container {
     width: 55%;
-    background-image: url('../../../assets/imgs/login-Wallpaper.jpg');
-    background-size: cover;
-    background-position: center;
+}
+
+.sendLoginButton {
+    box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.60);
 }
 
 @media (max-width: 640px) {
