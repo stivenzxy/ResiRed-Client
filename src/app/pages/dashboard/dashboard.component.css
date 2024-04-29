@@ -1,0 +1,13 @@
+.mat-expansion-panel-header{
+    padding: 0;
+    font-size: 16px;
+}
+
+.mat-expansion-panel:not([class*=mat-elevation-z]) {
+    box-shadow: none;
+}
+
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:not([aria-disabled=true]):hover {
+    background: none;
+}
+

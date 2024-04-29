@@ -1,0 +1,10 @@
+<h2 mat-dialog-title class="text-center text-cyan-950"><span class="font-semibold text-cyan-950">Gestión de usuarios</span></h2>
+<mat-dialog-content>
+  <div class="uploadGroup flex justify-center items-center">
+    <input type="file" class="hidden" accept=".csv" #fileInput (change)="upload($event)" />
+    <button (click)="fileInput.click()" class="bg-sky-800 text-base text-white font-medium rounded-md shadow-lg py-2 px-4 truncate hover:bg-sky-900">Seleccionar archivo</button>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

@@ -1,13 +1,43 @@
-<section class="main-content flex justify-center items-center flex-col">
-    <h1 class="text-slate-800 font-bold">Bienvenido al dashboard</h1>
-    <button (click)="logout()" class="p-8 bg-cyan-600 hover:bg-cyan-900 text-white rounded-lg">Cerrar Sesión</button>
-   
+<section class="main-content flex flex-col mx-auto px-8 py-5 pt-28">
+    <h1 class="text-2xl md:text-3xl font-bold text-cyan-700">Bienvenid{{welcomeChar}} a ResiRed: {{user?.username}} </h1>
+    <p class="mb-4 text-cyan-600">La mejor plataforma de gestión de asambleas para tu conjunto residencial.</p>
 
-    <div class="data-user mt-10 font-bold">
-        <h2>Nombre de usuario</h2><b class="text-slate-800">{{user?.username + ' ' + user?.lastname}}</b>
-        <h2>Correo</h2><b class="text-slate-800">{{user?.email}}</b>
-        <h2>Direccion</h2><b class="text-slate-800">{{user?.address}}</b>
-        <h2>Exp</h2><b class="text-slate-800">{{user?.exp}}</b>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+        <!-- Panel de control de usuarios -->
+        @if(user?.role === 'ADMIN'){
+        <div class="bg-white shadow-md rounded-lg p-5">
+            <h2 class="text-xl font-semibold text-cyan-800">Panel de Control de usuarios</h2>
+            <mat-accordion class="my-accordion" matTooltip="Gestionar usuarios del conjunto residencial"
+                matTooltipPosition="above">
+                <mat-expansion-panel hideToggle>
+                    <mat-expansion-panel-header>
+                        <p class="text-cyan-600 cursor-pointer truncate" mat-panel-title>Agrega visualiza y elimina
+                            usuarios de ResiRed</p>
+                    </mat-expansion-panel-header>
+
+                    <!-- Contenido del panel expansible -->
+                    <div class="flex flex-col truncate space-y-2">
+                        <button (click)="openManageUsersDialog()"
+                            class="bg-cyan-700 text-white text-base font-medium p-2 rounded-md hover:bg-cyan-900 shadow-lg">Gestionar
+                            propietarios</button>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+        }
+        <!-- Asambleas recientes -->
+        <div class="md:col-span-2 min-h-full bg-white shadow-md rounded-lg p-5">
+            <h2 class="text-xl font-semibold text-cyan-800">Próximas Asambleas</h2>
+            <ul>
+                <li class="text-cyan-600">Asamblea General - 18 Abril 2024</li>
+                <!-- <li class="text-cyan-600">Reunión de Presupuesto - 22 Abril 2024</li> -->
+            </ul>
+        </div>
+
+        <!-- Herramientas adicionales -->
+        <div class="bg-white shadow-md rounded-lg p-5">
+            <h2 class="text-xl font-semibold text-cyan-800">Herramientas</h2>
+            <p class="text-cyan-600">Acceso rápido a herramientas útiles para la gestión.</p>
+        </div>
     </div>
 </section>
-

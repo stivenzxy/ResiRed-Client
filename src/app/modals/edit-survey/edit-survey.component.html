@@ -1,0 +1,83 @@
+<h2 mat-dialog-title class="text-center text-cyan-950"><span class="font-semibold text-cyan-950">Editar Encuesta</span>
+</h2>
+<mat-dialog-content>
+  <div class="topic-update flex flex-row justify-center items-center">
+    <mat-form-field appearance="fill">
+      <mat-label>Tema</mat-label>
+      <input matInput [(ngModel)]="topic">
+    </mat-form-field>
+    <button class="bg-sky-800 hover:bg-sky-900 text-white font-medium py-1 px-2 rounded-sm shadow-lg ml-4 mb-2 truncate"
+      (click)="updateTopic()">Actualizar nombre</button>
+  </div>
+
+  <!-- Acordión para preguntas -->
+  <mat-accordion class="example-headers-align" multi>
+    @for (question of questions; track question.questionId) {
+    <mat-expansion-panel [expanded]="expandedPanel === question.questionId"
+      (opened)="setExpandedPanel(question.questionId)">
+      <mat-expansion-panel-header>
+        <p class="text-cyan-800 font-medium text-base cursor-pointer truncate" mat-panel-title>{{ question.description
+          }}</p>
+      </mat-expansion-panel-header>
+      <div class="update-question w-full">
+        <mat-form-field class="w-[80%]" appearance="fill">
+          <mat-label>Editar descripción de pregunta</mat-label>
+          <input matInput [(ngModel)]="question.description">
+        </mat-form-field>
+        @if(!question.questionId){
+          <button (click)="createQuestion(question)" 
+          class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded-sm shadow-lg ml-4"
+          matTooltip="Guardar nueva pregunta" matTooltipPosition="right">
+          <i class="fas fa-save"></i>
+        </button>
+        }
+      </div>
+
+      <!-- Respuestas para cada pregunta -->
+      @for (choice of question.choices; track choice.choiceId) {
+      <div class="truncate">
+        <mat-form-field class="md:w-auto w-[40%]" appearance="fill">
+          <mat-label>Editar opcion</mat-label>
+          <input matInput [(ngModel)]="choice.description">
+        </mat-form-field>
+
+        <!-- Solo muestra el botón de guardar si la opción es nueva (no tiene choiceId) -->
+        @if (!choice.choiceId) {
+        <button (click)="saveNewChoice(question.questionId, choice)"
+          class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded-sm shadow-lg ml-4"
+          matTooltip="Guardar nueva opción" matTooltipPosition="right">
+          <i class="fas fa-save"></i>
+        </button>
+        }
+
+        <button (click)="deleteChoice(choice.choiceId, question)"
+          class="bg-red-700 hover:bg-red-900 text-white p-2 rounded-sm shadow-lg ml-4"
+          matTooltip="Eliminar opcion de respuesta" matTooltipPosition="right">
+          <i class="fa fas fa-trash"></i>
+        </button>
+      </div>
+      }
+      <button (click)="addNewChoice(question)"
+        class="bg-green-700 hover:bg-green-900 text-white p-2 rounded-sm shadow-lg mt-2 truncate">Añadir Opción</button>
+      <mat-action-row>
+        <button class="bg-red-800 hover:bg-red-900 text-white font-medium p-2 mr-4 rounded-sm shadow-lg truncate"
+          matTooltip="Eliminar Pregunta" matTooltipPosition="above" (click)="deleteQuestion(question)">Eliminar
+          Pregunta</button>
+        <button class="bg-cyan-800 hover:bg-cyan-900 text-white font-medium p-2 mr-4 rounded-sm shadow-lg truncate"
+          matTooltip="Actualizar campos" matTooltipPosition="right" (click)="updateQuestion(question)">Actualizar
+          Cambios</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+    }
+  </mat-accordion>
+
+  <div class="addNew-question flex justify-center items-center w-full">
+    <button (click)="addNewQuestion()" class="bg-cyan-800 hover:bg-cyan-950 text-white p-2 rounded-sm shadow-lg mt-4">
+      Añadir Nueva Pregunta
+    </button>
+  </div>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Cancelar</button>
+</mat-dialog-actions>

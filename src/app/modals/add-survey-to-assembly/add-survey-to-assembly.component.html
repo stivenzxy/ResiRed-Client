@@ -1,0 +1,13 @@
+<h2 mat-dialog-title class="text-center"><span class="font-semibold text-cyan-950">Seleccione Encuestas</span></h2>
+<mat-dialog-content>
+    <div class="surveys-list flex flex-col">
+        @for (survey of data.surveys; track survey.surveyId) {
+        <mat-checkbox [checked]="data.selected.includes(survey.surveyId)" (change)="toggleSelection(survey.surveyId)">
+            {{ survey.topic }}
+        </mat-checkbox>
+        }
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button (click)="closeDialog()">Cerrar</button>
+</mat-dialog-actions>

@@ -1,0 +1,107 @@
+<section class="flex flex-col mx-auto px-8 py-5 pt-28">
+  <div class="survey-content">
+    <!-- Tabla de encuestas -->
+    <h1 class="text-cyan-950 font-bold text-2xl">Encuestas creadas</h1>
+    <mat-form-field class="mt-4">
+      <mat-label class="font-semibold">Filtrar Encuestas</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ej: Seguridad" #input>
+    </mat-form-field>
+
+    <div class="mat-elevation-z8">
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <!-- Topic Column -->
+          <ng-container matColumnDef="Tema">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-center">Tema</th>
+            <td mat-cell *matCellDef="let row">{{row.topic}}</td>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="Fecha_creacion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de Creación</th>
+            <td mat-cell *matCellDef="let row">{{row.dateCreated}}</td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="Accion">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Acción</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="inline-flex justify-center font-medium truncate">
+                <button class="bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-4 rounded" matTooltip="Editar"
+                  matTooltipPosition="below" (click)="editSurvey(row.surveyId, row.topic)">
+                  Editar<i class="fa fas fa-pencil ml-2"></i>
+                </button>
+                <button class="bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded ml-2" matTooltip="Eliminar"
+                  matTooltipPosition="below" (click)="deleteSurvey(row.surveyId, row.topic)">
+                  Eliminar <i class="fa fas fa-trash ml-2"></i>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell pl-10 pt-10 text-cyan-900 font-bold" colspan="4">No se encuntraron resultados para:
+              "{{input.value}}"</td>
+          </tr>
+        </table>
+      </div>
+
+      <mat-paginator [pageSizeOptions]="[3,6,9]" aria-label="Select page of users"></mat-paginator>
+    </div>
+
+    <div class="w-full mt-12">
+      <h1 class="text-cyan-950 font-bold text-2xl mb-4">Crear encuesta</h1>
+      <form [formGroup]="surveyForm">
+        <mat-form-field color="accent" appearance="fill">
+          <mat-label>Tema de la Encuesta</mat-label>
+          <input matInput formControlName="topic">
+          <mat-error *ngIf="surveyForm.get('topic')?.touched && surveyForm.get('topic')?.hasError('required')">
+            El tema es requerido.
+          </mat-error>
+        </mat-form-field>
+
+        <div formArrayName="questions" class="p-4">
+          <div *ngFor="let question of questions.controls; let i=index" [formGroupName]="i">
+            <div class="question-input flex items-baseline justify-center mt-4">
+              <mat-form-field appearance="fill">
+                <mat-label>Pregunta {{i+1}}</mat-label>
+                <input matInput formControlName="description">
+              </mat-form-field>
+              <button mat-mini-fab color="warn" (click)="removeQuestion(i)" aria-label="Eliminar pregunta">
+                <i class="fa fas fa-trash"></i>
+              </button>
+            </div>
+
+            <div formArrayName="choices" class="w-[80%]">
+              <div *ngFor="let choice of getChoices(i).controls; let j = index">
+                <div class="answer-input flex items-baseline justify-center">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Opcion de respuesta {{j + 1}}</mat-label>
+                    <input matInput [formControlName]="j">
+                  </mat-form-field>
+                  <button mat-mini-fab color="warn" (click)="removeAnswer(i, j)" aria-label="Eliminar respuesta">
+                    <i class="fa fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button mat-stroked-button color="warn" (click)="addChoice(i)">
+              <i class="fa fas fa-plus mr-1"></i>Respuesta
+            </button>
+          </div>
+        </div>
+        <div class="flex items-start justify-between p-4">
+          <button mat-flat-button color="accent" class="mr-4" (click)="addQuestion()"><i
+              class="fa fas fa-plus mr-1"></i>Pregunta</button>
+          <button mat-raised-button color="primary" class="mb-8" (click)="submitNewSurvey()">Añadir Encuesta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

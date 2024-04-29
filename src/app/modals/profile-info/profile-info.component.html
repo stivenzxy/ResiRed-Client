@@ -1,0 +1,25 @@
+<h2 mat-dialog-title class="text-center"><span class=" font-semibold text-cyan-950">Información Personal</span></h2>
+<mat-dialog-content>
+  <div class="p-4 rounded-sm shadow my-2 w-fit">
+    <div class="user-info-group">
+      <label class="font-semibold">Nombre de usuario:</label>
+      <span class="user-detail">{{ user?.username + ' ' + user?.lastname }}</span>
+    </div>
+    <div class="user-info-group">
+      <label class="font-semibold">Dirección:</label>
+      <span class="user-detail">{{ user?.address }}</span>
+    </div>
+    <div class="user-info-group">
+      <label class="font-semibold">Email:</label>
+      <span class="user-detail">{{ user?.email }}</span>
+    </div>
+    <div class="user-info-group">
+      <label class="font-semibold">Rol:</label>
+      <span class="user-detail">{{ user?.role === 'ADMIN' ? 'Administrador'
+        : user?.role === 'OWNER' ? 'Propietario' : '' }}</span>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>

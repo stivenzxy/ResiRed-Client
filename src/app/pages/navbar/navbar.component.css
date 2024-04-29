@@ -1,0 +1,12 @@
+.active {
+    color: #0d9488;
+}
+
+@media (max-width: 768px) {
+    @media (prefers-color-scheme: dark) {
+        .active {
+            background-color: #0d9488;
+            color: #FFFFFF;
+        }
+    }
+}

@@ -4,5 +4,6 @@ export interface UserDecodeToken {
     lastname?:string,
     address:string,
     email:string,
-    exp:number
+    exp:number,
+    role:string
 }

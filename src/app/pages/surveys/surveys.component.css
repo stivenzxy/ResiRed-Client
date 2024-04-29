@@ -1,0 +1,29 @@
+table {
+    width: 100%;
+}
+
+.mat-mdc-table {
+    table-layout: auto;
+}
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+  
+td, th {
+    width: 25%;
+}
+
+.mat-sort-header-container {
+   justify-content: center;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto; 
+}
+
+table {
+    min-width: 600px; 
+}

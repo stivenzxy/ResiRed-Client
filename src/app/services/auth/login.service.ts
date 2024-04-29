@@ -1,11 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { LoginRequest } from './loginRequest';
 import {
   BehaviorSubject,
   Observable,
   catchError,
   map,
+  of,
   tap,
   throwError,
 } from 'rxjs';
@@ -13,6 +14,7 @@ import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { UserDecodeToken } from './userDecodeToken';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -24,34 +26,42 @@ export class LoginService {
   );
   currentUserData: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  constructor(private http: HttpClient, private router: Router) {
-    this.initialize();
-    //window.addEventListener('beforeunload', () => this.stopTokenCheck());
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.initialize();
+    }
   }
 
   private initialize(): void {
-    // Verifica y establece el estado inicial basado en el token existente
-    if (typeof window !== 'undefined') {
-      const accessToken = sessionStorage.getItem('accessToken');
+    if (isPlatformBrowser(this.platformId)) {
+      const accessToken = localStorage.getItem('accessToken');
       const isLoggedIn = accessToken !== null && !this.isTokenExpired(accessToken);
       this.currentUserLoginOn.next(isLoggedIn);
       this.currentUserData.next(accessToken || '');
+
       if (isLoggedIn) {
-        this.startTokenCheck(); // Inicia la verificación periódica si el usuario está logueado
+        this.startTokenCheck();
       }
     }
   }
 
   login(credentials: LoginRequest): Observable<any> {
     return this.http
-      .post<any>(`${environment.urlHost}auth/login`, credentials)
+      .post<any>(`http://localhost:8081/auth/login`, credentials)
       .pipe(
         tap((userData: any) => {
-          sessionStorage.setItem('accessToken', userData.accessToken);
-          sessionStorage.setItem('refreshToken', userData.refreshToken); // Almacena el refresh token
+          if (isPlatformBrowser(this.platformId)) {
+            localStorage.setItem('accessToken', userData.accessToken);
+            localStorage.setItem('refreshToken', userData.refreshToken);
+          }
           this.currentUserData.next(userData.accessToken);
           this.currentUserLoginOn.next(true);
           this.startTokenCheck();
+          this.router.navigate(['dashboard'], { replaceUrl: true });
         }),
         map((userData) => userData.accessToken),
         catchError(this.handleError)
@@ -75,9 +85,8 @@ export class LoginService {
     return this.currentUserLoginOn.asObservable();
   }
 
-  // En LoginService
   get userToken(): string | null {
-    return sessionStorage.getItem('accessToken');
+    return localStorage.getItem('accessToken');
   }
 
   decodeToken(): UserDecodeToken | undefined {
@@ -94,16 +103,16 @@ export class LoginService {
   }
 
   refreshToken(): Observable<any> {
-    const refreshToken = sessionStorage.getItem('refreshToken');
+    const refreshToken = localStorage.getItem('refreshToken');
     return this.http
-      .post<any>(`${environment.urlHost}auth/refresh`, {
+      .post<any>(`http://localhost:8081/auth/refresh`, {
         refreshToken: refreshToken,
       })
       .pipe(
         tap((tokens: any) => {
-          sessionStorage.setItem('accessToken', tokens.accessToken);
-          console.log("token refrescado: ", tokens.accessToken);
-          sessionStorage.setItem('refreshToken', tokens.refreshToken);
+          localStorage.setItem('accessToken', tokens.accessToken);
+          console.log('token refrescado: ', tokens.accessToken);
+          localStorage.setItem('refreshToken', tokens.refreshToken);
           this.currentUserData.next(tokens.accessToken); // Actualiza el BehaviorSubject con el nuevo token
           this.currentUserLoginOn.next(true);
           this.startTokenCheck();
@@ -123,9 +132,9 @@ export class LoginService {
   private startTokenCheck(): void {
     this.stopTokenCheck();
     this.tokenCheckInterval = setInterval(() => {
-      if (this.isTokenExpired(sessionStorage.getItem("accessToken"))) {
+      if (this.isTokenExpired(localStorage.getItem('accessToken'))) {
         this.refreshToken().subscribe({
-          error: () => this.logout(), // Si el refresh falla, cierra la sesión
+          error: () => this.logout(), // Si el refresh no funciona, cierra la sesión
         });
       }
     }, 60000); // Comprueba cada minuto
@@ -139,9 +148,12 @@ export class LoginService {
   }
 
   logout(): void {
-    const refreshToken = sessionStorage.getItem('refreshToken');
+    const refreshToken = localStorage.getItem('refreshToken');
     if (refreshToken) {
-      this.http.post(`${environment.urlHost}auth/logout`, { refreshToken: refreshToken })
+      this.http
+        .post(`http://localhost:8081/auth/logout`, {
+          refreshToken: refreshToken,
+        })
         .subscribe({
           next: () => {
             this.clearSession();
@@ -151,19 +163,18 @@ export class LoginService {
             console.error('Error durante el logout:', error);
             this.clearSession();
             this.router.navigate(['login'], { replaceUrl: true });
-          }
+          },
         });
     } else {
       this.clearSession();
       this.router.navigate(['login'], { replaceUrl: true });
     }
   }
-  
+
   private clearSession(): void {
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('refreshToken');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     this.stopTokenCheck();
     this.currentUserLoginOn.next(false);
   }
-  
 }

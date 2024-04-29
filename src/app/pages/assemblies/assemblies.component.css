@@ -1,0 +1,9 @@
+.img-container {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    max-width: 90%;
+    max-height: 60%;
+    height: 50%;
+}

@@ -23,7 +23,7 @@ export class JwtInterceptorService implements HttpInterceptor {
     if(this.accessToken) {
       req = req.clone({
         setHeaders: {
-          'Content-Type': 'application/json;charset=utf-8',
+          //'Content-Type': 'application/json;charset=utf-8',
           'Accept': 'application/json',
           'Authorization': `Bearer ${this.accessToken}`,
         },   

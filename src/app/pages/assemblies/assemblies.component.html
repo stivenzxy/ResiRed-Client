@@ -1,0 +1,87 @@
+@if (user?.role === 'ADMIN') {
+<section class="admin-content flex flex-col mx-auto px-8 py-5 pt-28">
+    <div class="Create-assembly-content">
+        <h1 class="text-cyan-950 font-bold text-2xl">Crear asamblea</h1>
+
+        <form [formGroup]="assemblyForm" class="flex flex-col w-full md:w-[50%] mt-8 gap-7">
+            <mat-form-field appearance="fill">
+                <mat-label>Titulo de la asamblea</mat-label>
+                <input matInput formControlName="title">
+                @if (assemblyForm.get('title')?.errors?.['required']) {
+                <mat-error>
+                    Este campo es obligatorio
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Descripción</mat-label>
+                <textarea matInput formControlName="description" required></textarea>
+                @if (assemblyForm.get('description')?.errors?.['required']) {
+                <mat-error>
+                    Este campo es obligatorio
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>Fecha de la asamblea</mat-label>
+                <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" formControlName="date">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker touchUi #picker></mat-datepicker>
+                @if (assemblyForm.get('date')?.errors?.['required']) {
+                <mat-error>
+                    Este campo es obligatorio
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Hora inicial (Hora de inicio de la asamblea)</mat-label>
+                <input matInput type="time" formControlName="startTime" required>
+                @if (assemblyForm.get('startTime')?.errors?.['required']) {
+                <mat-error>
+                    Este campo es obligatorio
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Hora de finalización (Hora a la que termina la asamblea)</mat-label>
+                <input matInput type="time" formControlName="endTime" required>
+                @if (assemblyForm.get('endTime')?.errors?.['required']) {
+                <mat-error>
+                    Este campo es obligatorio
+                </mat-error>
+                }
+            </mat-form-field>
+
+            <button mat-stroked-button color="accent" (click)="openSurveySelector()">Seleccionar Encuestas</button>
+
+            <button mat-raised-button color="primary" (click)="submitNewAssembly()" type="submit">Crear
+                asamblea</button>
+        </form>
+    </div>
+</section>
+}
+
+@if(user?.role === 'OWNER'){
+<section class="owner-content flex flex-col mx-auto px-8 py-5 pt-28">
+    <h1 class="text-cyan-950 font-bold text-2xl">Unirse a asamblea</h1>
+    <div class="join-assembly-content flex flex-col sm:flex-row h-4/5">
+        <div class="container-left w-full sm:w-1/2 bg-gray-100 flex items-center justify-center">
+            <div class="text-container max-w-[35rem] p-4 md:p-8 font-extrabold text-2xl">
+                Esta función aún se encuentra en desarrollo :) <br><br>
+                ¡Seguimos trabajando fuertemente para que tu puedas disfrutar ResiRed lo mas pronto posible!
+            </div>
+        </div>
+        <div class="container-right w-full sm:w-1/2 bg-gray-200 flex items-center justify-center">
+            <div class="max-w-lg p-4 md:p-8">
+                <div class="img-container">
+                    <img src="assets/imgs/working-component.png" alt="working">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+}
