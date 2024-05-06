@@ -51,7 +51,7 @@ export class LoginService {
 
   login(credentials: LoginRequest): Observable<any> {
     return this.http
-      .post<any>(`http://localhost:8081/auth/login`, credentials)
+      .post<any>(`${environment.authUrl}login`, credentials)
       .pipe(
         tap((userData: any) => {
           if (isPlatformBrowser(this.platformId)) {
@@ -105,7 +105,7 @@ export class LoginService {
   refreshToken(): Observable<any> {
     const refreshToken = localStorage.getItem('refreshToken');
     return this.http
-      .post<any>(`http://localhost:8081/auth/refresh`, {
+      .post<any>(`${environment.authUrl}refresh`, {
         refreshToken: refreshToken,
       })
       .pipe(

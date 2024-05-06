@@ -12,4 +12,17 @@ export class ManageAssembliesService {
   createAssembly(request: any): Observable<any> {
     return this.http.post(`${environment.urlHost}assembly/create`, request);
   }
+
+  getAssemblies(): Observable<any> {
+    return this.http.get<any>(`${environment.urlHost}assembly/history`);
+  }
+
+  getScheduledAssemblie(): Observable<any> {
+    return this.http.get<any>(`${environment.urlHost}assembly/scheduled`);
+  }
+
+  checkAssemblyAvailability(assemblyId: number): Observable<any> {
+    return this.http.get(`${environment.urlHost}assembly/available/${assemblyId}`);
+  }
+
 }

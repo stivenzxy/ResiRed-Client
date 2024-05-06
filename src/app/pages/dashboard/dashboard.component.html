@@ -1,5 +1,6 @@
 <section class="main-content flex flex-col mx-auto px-8 py-5 pt-28">
-    <h1 class="text-2xl md:text-3xl font-bold text-cyan-700">Bienvenid{{welcomeChar}} a ResiRed: {{user?.username}} </h1>
+    <h1 class="text-2xl md:text-3xl font-bold text-cyan-700">Bienvenid{{welcomeChar}} a ResiRed: {{user?.username}}
+    </h1>
     <p class="mb-4 text-cyan-600">La mejor plataforma de gestión de asambleas para tu conjunto residencial.</p>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
@@ -25,19 +26,29 @@
             </mat-accordion>
         </div>
         }
-        <!-- Asambleas recientes -->
-        <div class="md:col-span-2 min-h-full bg-white shadow-md rounded-lg p-5">
-            <h2 class="text-xl font-semibold text-cyan-800">Próximas Asambleas</h2>
-            <ul>
-                <li class="text-cyan-600">Asamblea General - 18 Abril 2024</li>
-                <!-- <li class="text-cyan-600">Reunión de Presupuesto - 22 Abril 2024</li> -->
-            </ul>
-        </div>
-
+        @if(user?.role === 'ADMIN'){
         <!-- Herramientas adicionales -->
-        <div class="bg-white shadow-md rounded-lg p-5">
+        <div class="md:col-span-2 min-h-full bg-white shadow-md rounded-lg p-5">
             <h2 class="text-xl font-semibold text-cyan-800">Herramientas</h2>
+
             <p class="text-cyan-600">Acceso rápido a herramientas útiles para la gestión.</p>
+
         </div>
+        }
+        <!-- Asambleas recientes -->
+
+        <div class="bg-white shadow-md rounded-lg p-5">
+            <h2 class="text-xl font-semibold text-cyan-800">Próxima Asamblea</h2>
+            @if(upcomingAssembly?.isPresent){
+            <div class="gap-2">
+              <p class="text-cyan-600"><strong>Título: </strong>{{ upcomingAssembly.title }}</p>
+              <p class="text-cyan-600"><strong>Fecha: </strong>{{ upcomingAssembly.date }}</p>
+              <p class="text-cyan-600"><strong>Hora de inicio: </strong>{{ upcomingAssembly.startTime }}</p>
+              <button (click)="joinAssembly(upcomingAssembly.id)" class="bg-cyan-700 text-white text-base font-medium p-2 rounded-md hover:bg-cyan-900 shadow-lg mt-4">Unirse a la Asamblea</button>
+            </div>
+        }
+
+        @if(!upcomingAssembly?.isPresent){<p class="text-cyan-600">No hay ninguna asamblea programada actualmente</p>}
+          </div>
     </div>
 </section>

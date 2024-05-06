@@ -1,66 +1,81 @@
 @if (user?.role === 'ADMIN') {
 <section class="admin-content flex flex-col mx-auto px-8 py-5 pt-28">
-    <div class="Create-assembly-content">
-        <h1 class="text-cyan-950 font-bold text-2xl">Crear asamblea</h1>
+    <div class="flex flex-wrap -mx-2">
+        <div class="w-full md:w-1/2 px-2">
+            <div class="Create-assembly-content">
+                <h1 class="text-cyan-950 font-bold text-2xl">Crear asamblea</h1>
 
-        <form [formGroup]="assemblyForm" class="flex flex-col w-full md:w-[50%] mt-8 gap-7">
-            <mat-form-field appearance="fill">
-                <mat-label>Titulo de la asamblea</mat-label>
-                <input matInput formControlName="title">
-                @if (assemblyForm.get('title')?.errors?.['required']) {
-                <mat-error>
-                    Este campo es obligatorio
-                </mat-error>
+                <form [formGroup]="assemblyForm" class="flex flex-col w-full mt-8 gap-7">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Titulo de la asamblea</mat-label>
+                        <input matInput formControlName="title">
+                        @if (assemblyForm.get('title')?.errors?.['required']) {
+                        <mat-error>
+                            Este campo es obligatorio
+                        </mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Descripción</mat-label>
+                        <textarea matInput formControlName="description" required></textarea>
+                        @if (assemblyForm.get('description')?.errors?.['required']) {
+                        <mat-error>
+                            Este campo es obligatorio
+                        </mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Fecha de la asamblea</mat-label>
+                        <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" formControlName="date">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker touchUi #picker></mat-datepicker>
+                        @if (assemblyForm.get('date')?.errors?.['required']) {
+                        <mat-error>
+                            Este campo es obligatorio
+                        </mat-error>
+                        }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Hora inicial (Hora de inicio de la asamblea)</mat-label>
+                        <input matInput type="time" formControlName="startTime" required>
+                        @if (assemblyForm.get('startTime')?.errors?.['required']) {
+                        <mat-error>
+                            Este campo es obligatorio
+                        </mat-error>
+                        }
+                    </mat-form-field>
+
+                    <button mat-stroked-button color="accent" (click)="openSurveySelector()">Seleccionar
+                        Encuestas</button>
+
+                    <button mat-raised-button color="primary" (click)="submitNewAssembly()" type="submit">Crear
+                        asamblea</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="w-full md:w-1/2 px-2 md:mt-0 mt-20">
+            <div class="assembly-history-content">
+                <h2 class="text-cyan-950 font-bold text-2xl mb-4">Historial de asambleas</h2>
+                @for (assembly of assemblies; track assembly.id) {
+                <div class="mb-4 p-4 shadow-md rounded bg-white hover:bg-gray-300 cursor-pointer">
+                    <h3 class="text-lg font-bold">{{ assembly.title }}</h3>
+                    <p>{{ assembly.description }}</p>
+                    <p><strong>Fecha:</strong> {{ assembly.date }}</p>
+                    <p><strong>Hora de inicio:</strong> {{ assembly.startTime }}</p>
+                    <p><strong>Estado:</strong> {{ assembly.status === "FINISHED" ? 'Finalizada' : 'Cancelada' }}</p>
+                    <p><strong>Encuestas asociadas:</strong>
+                        @for (survey of assembly.surveys; track survey.id) {
+                        {{survey.topic}}
+                        }
+                    </p>
+                </div>
                 }
-            </mat-form-field>
-
-            <mat-form-field appearance="fill">
-                <mat-label>Descripción</mat-label>
-                <textarea matInput formControlName="description" required></textarea>
-                @if (assemblyForm.get('description')?.errors?.['required']) {
-                <mat-error>
-                    Este campo es obligatorio
-                </mat-error>
-                }
-            </mat-form-field>
-
-            <mat-form-field class="example-full-width">
-                <mat-label>Fecha de la asamblea</mat-label>
-                <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" formControlName="date">
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker touchUi #picker></mat-datepicker>
-                @if (assemblyForm.get('date')?.errors?.['required']) {
-                <mat-error>
-                    Este campo es obligatorio
-                </mat-error>
-                }
-            </mat-form-field>
-
-            <mat-form-field appearance="fill">
-                <mat-label>Hora inicial (Hora de inicio de la asamblea)</mat-label>
-                <input matInput type="time" formControlName="startTime" required>
-                @if (assemblyForm.get('startTime')?.errors?.['required']) {
-                <mat-error>
-                    Este campo es obligatorio
-                </mat-error>
-                }
-            </mat-form-field>
-
-            <mat-form-field appearance="fill">
-                <mat-label>Hora de finalización (Hora a la que termina la asamblea)</mat-label>
-                <input matInput type="time" formControlName="endTime" required>
-                @if (assemblyForm.get('endTime')?.errors?.['required']) {
-                <mat-error>
-                    Este campo es obligatorio
-                </mat-error>
-                }
-            </mat-form-field>
-
-            <button mat-stroked-button color="accent" (click)="openSurveySelector()">Seleccionar Encuestas</button>
-
-            <button mat-raised-button color="primary" (click)="submitNewAssembly()" type="submit">Crear
-                asamblea</button>
-        </form>
+            </div>
+        </div>
     </div>
 </section>
 }

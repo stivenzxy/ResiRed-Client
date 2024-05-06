@@ -1,0 +1,6 @@
+.mdc-dialog__content {
+    flex-grow: 1;
+    box-sizing: border-box;
+    margin: 0;
+    overflow:hidden;
+}

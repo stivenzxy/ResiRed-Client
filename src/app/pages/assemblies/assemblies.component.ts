@@ -44,6 +44,7 @@ import { LoginService } from '../../services/auth/login.service';
 export class AssembliesComponent implements OnInit {
   user?:UserDecodeToken;
   assemblyForm: FormGroup = new FormGroup('');
+  assemblies: any[] = [];
   surveys: SurveyData[] = [];
   selectedSurveys: Set<number> = new Set();
   minDate: Date;
@@ -69,10 +70,10 @@ export class AssembliesComponent implements OnInit {
       description: ['', Validators.required],
       date: ['', Validators.required],
       startTime: ['', Validators.required],
-      endTime: ['', Validators.required],
       surveys: [this.selectedSurveys],
     });
     this.loadSurveys();
+    this.loadAssembliesHistory();
   }
 
   loadSurveys(): void {
@@ -130,5 +131,17 @@ export class AssembliesComponent implements OnInit {
   private resetForm(): void {
     this.assemblyForm.reset();
     this.selectedSurveys.clear(); 
+  }
+
+  loadAssembliesHistory() {
+    this.assemblyService.getAssemblies().subscribe(
+      (data) => {
+        this.assemblies = data;
+        console.log(data);
+      },
+      (error) => {
+        console.error('Error loading the assemblies:', error);
+      }
+    );
   }
 }

@@ -7,7 +7,6 @@
     justify-content: center; /* centrar horizontalmente */
     align-items: center; /* centrar verticalmente */
     background-image: linear-gradient(to right top, #2f4858, #466371, #60808a, #7c9da3, #9abbbd);
-    
 }
 
 .login-container {

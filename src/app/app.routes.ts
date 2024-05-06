@@ -5,11 +5,13 @@ import { authGuard } from './services/auth/auth.guard';
 import { authLoggedInGuard } from './services/auth/auth-logged-in.guard';
 import { SurveysComponent } from './pages/surveys/surveys.component';
 import { AssembliesComponent } from './pages/assemblies/assemblies.component';
+import { ChangePasswordComponent } from './pages/change-password/change-password.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     { path: 'login', component: LoginComponent, canActivate:[authLoggedInGuard]},
     { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard]},
     { path: 'surveys', component: SurveysComponent, canActivate: [authGuard]},
-    { path: 'assemblies', component: AssembliesComponent, canActivate: [authGuard]}
+    { path: 'assemblies', component: AssembliesComponent, canActivate: [authGuard]},
+    { path: 'resetPassword', component: ChangePasswordComponent}
 ];

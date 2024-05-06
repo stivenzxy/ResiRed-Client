@@ -16,4 +16,8 @@ export class UploadUsersFileService {
       observe: 'events'
     })
   }
+
+  viewUserList(){
+    return this.http.get<any[]>(`${environment.urlHost}users/owners`);
+  }
 }
