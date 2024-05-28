@@ -21,7 +21,7 @@ export const navbarData : INavbarData[] = [
     },
     {   
         id:4,
-        routeLink: 'FAQSection',
+        routeLink: 'FAQ',
         label: 'Ayuda',
         visible: true
     },

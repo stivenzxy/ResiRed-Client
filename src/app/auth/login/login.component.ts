@@ -6,7 +6,7 @@ import Swal from 'sweetalert2'
 import { LoginService } from '../../services/auth/login.service';
 import { LoginRequest } from '../../services/auth/loginRequest';
 import { ResetPasswordService } from '../../services/auth/reset-password.service';
-
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -28,9 +28,7 @@ export class LoginComponent implements OnInit{
     })
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void { }
 
   togglePasswordVisibility() {
     this.hidePassword = !this.hidePassword;
@@ -92,7 +90,6 @@ export class LoginComponent implements OnInit{
     }
   }
 
-
   sendEmailAndRequestCode() {
     Swal.fire({
       title: 'Ingrese su correo electrónico',
@@ -101,7 +98,7 @@ export class LoginComponent implements OnInit{
       showCancelButton: true,
       confirmButtonColor: '#388261',
       confirmButtonText: 'Enviar',
-      showLoaderOnConfirm: true, // Activar el loader cuando se confirma
+      showLoaderOnConfirm: true, // Activar el loader cuando se envia el email
       preConfirm: (email) => {
         Swal.showLoading(); // Mostrar el loader explícitamente
         return new Promise((resolve, reject) => {

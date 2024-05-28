@@ -55,8 +55,10 @@
                 <li>
                     <a [routerLink]="[data.routeLink]" routerLinkActive="active"
                         [routerLinkActiveOptions]="{exact: true}" class="block py-2 px-3 cursor-pointer text-gray-900 rounded hover:bg-gray-100
-                        md:p-0 dark:text-white md:dark:hover:text-teal-600 dark:hover:bg-gray-700
-                        dark:hover:text-white md:dark:hover:bg-transparent">{{data.label}}</a>
+                    md:p-0 dark:text-white md:dark:hover:text-teal-600 dark:hover:bg-gray-700
+                    dark:hover:text-white md:dark:hover:bg-transparent"
+                        (click)="isNavbarOpen ? toggleNavbar() : null">{{data.label}}</a>
+
                 </li>}
                 }
             </ul>

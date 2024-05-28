@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoginService } from '../../services/auth/login.service';
 import { UserDecodeToken } from '../../services/auth/userDecodeToken';
-import { DemoService } from '../../services/auth/demo.service';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,6 +8,7 @@ import { ManageOwnersComponent } from '../../modals/manage-owners/manage-owners.
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ManageAssembliesService } from '../../services/assembly/manage-assemblies.service';
 import Swal from 'sweetalert2'
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,24 +26,20 @@ export class DashboardComponent implements OnInit, OnDestroy{
   isLoadedComponent: boolean = false;
   upcomingAssembly: any = null;
 
-  constructor(private loginService : LoginService, private demoService: DemoService, private dialog: MatDialog, private assemblyService: ManageAssembliesService) {
+  constructor(private loginService : LoginService, private dialog: MatDialog, 
+    private assemblyService: ManageAssembliesService, private router: Router) {
     this.user = this.loginService.decodeToken();
   }
 
   ngOnInit(): void{
     this.isLoadedComponent = true;
-    this.demoService.getMessage().subscribe({
-      next: (response) => console.log(response),
-      error: (error) => console.error(error)
-    });
-    this.isLoadedComponent = true;
-
     this.loadScheduledAssembly();
   }
 
   openManageUsersDialog() {
     const dialogRef = this.dialog.open(ManageOwnersComponent, {
       disableClose: true,
+      width: '800px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -52,7 +48,7 @@ export class DashboardComponent implements OnInit, OnDestroy{
   }
 
   loadScheduledAssembly() {
-    this.assemblyService.getScheduledAssemblie().subscribe({
+    this.assemblyService.getScheduledAssembly().subscribe({
       next: (data) => {
         this.upcomingAssembly = data;
         console.log(data);
@@ -61,16 +57,11 @@ export class DashboardComponent implements OnInit, OnDestroy{
     });
   }
 
-  joinAssembly(assemblyId: number) {
-    this.assemblyService.checkAssemblyAvailability(assemblyId).subscribe({
-      next: (response) => {
-        if (response.isAvailable) {
-          Swal.fire({
-            icon: 'info',
-            title: 'Ya te puedes unir a la asamblea!',
-            text: 'Ya te puedes unir, pero esta funcionalidad no esta terminada :p',
-            confirmButtonText: 'Entendido'
-          });
+  joinAssembly() {
+    this.assemblyService.getScheduledAssembly().subscribe({
+      next: (assembly) => {
+        if (assembly.isAvailable) {
+          this.router.navigate(["pre-assembly"]);
         } else {
           Swal.fire({
             icon: 'error',

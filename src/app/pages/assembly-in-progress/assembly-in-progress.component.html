@@ -1,0 +1,60 @@
+@if (assemblyStatus === 'STARTED') {
+<section class="flex flex-col mx-auto px-8 py-5 pt-28">
+    <div class="max-w-5xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold mb-4">Asamblea en curso</h1>
+        <h2 class="text-lg font-medium mb-2">{{ assemblyInProgress?.title }}</h2>
+        <p class="text-gray-600 mb-6">Su votación es importante, elija una opción por pregunta (marque el círculo)</p>
+
+        <div *ngIf="surveys.length > 0">
+            <div *ngIf="user?.role === 'ADMIN'">
+                <h3 class="text-xl font-semibold mb-4">{{ surveys[currentSurveyIndex].topic }}</h3>
+
+                <form>
+                    <div *ngIf="surveys[currentSurveyIndex].questions.length > 0" class="mb-6">
+                        <h4 class="text-lg font-semibold mb-2">{{
+                            surveys[currentSurveyIndex].questions[currentQuestionIndex].description }}</h4>
+                    </div>
+                </form>
+
+                <div class="flex justify-end mt-6">
+                    <button
+                        *ngIf="!(currentSurveyIndex === surveys.length - 1 && currentQuestionIndex === surveys[currentSurveyIndex].questions.length - 1)"
+                        (click)="nextQuestion()"
+                        [disabled]="currentSurveyIndex === surveys.length - 1 && currentQuestionIndex === surveys[currentSurveyIndex].questions.length - 1"
+                        class="bg-slate-700 hover:bg-slate-900 text-white py-2 px-4 rounded-lg">Siguiente</button>
+                    <button
+                        *ngIf="currentSurveyIndex === surveys.length - 1 && currentQuestionIndex === surveys[currentSurveyIndex].questions.length - 1"
+                        (click)="finishAssembly(assemblyInProgress.assemblyId)"
+                        class="bg-red-700 hover:bg-red-900 text-white py-2 px-4 rounded-lg">Terminar</button>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="user?.role === 'OWNER'">
+            <h3 class="text-xl font-semibold mb-4">{{ currentQuestion?.topic }}</h3>
+
+            <form (submit)="vote($event)" *ngIf="currentQuestion">
+                <div class="mb-6">
+                    <h4 class="text-lg font-semibold mb-2">{{ currentQuestion.description }}</h4>
+                    <div *ngFor="let choice of currentQuestion.choices" class="mb-2">
+                        <label class="flex items-center">
+                            <input type="radio" name="question{{ currentQuestion.questionId }}" class="mr-2"
+                                [checked]="choice.choiceId === selectedChoiceId" (click)="selectChoice(choice.choiceId)"
+                                >
+                            {{ choice.description }}
+                        </label>
+                    </div>
+                </div>
+                <button type="submit"
+                    class="bg-cyan-700 hover:bg-cyan-900 font-medium text-white py-2 px-4 rounded-lg mt-4 w-full"
+                    >Votar</button>
+            </form>
+        </div>
+    </div>
+</section>
+} @else {
+    <section class="flex flex-col mx-auto px-8 py-5 pt-28">
+        <h1>Not working</h1>
+        <h1>{{assemblyStatus}}</h1>
+    </section>
+}

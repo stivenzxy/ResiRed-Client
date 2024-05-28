@@ -1,102 +1,106 @@
-@if (user?.role === 'ADMIN') {
-<section class="admin-content flex flex-col mx-auto px-8 py-5 pt-28">
-    <div class="flex flex-wrap -mx-2">
-        <div class="w-full md:w-1/2 px-2">
-            <div class="Create-assembly-content">
-                <h1 class="text-cyan-950 font-bold text-2xl">Crear asamblea</h1>
-
-                <form [formGroup]="assemblyForm" class="flex flex-col w-full mt-8 gap-7">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Titulo de la asamblea</mat-label>
-                        <input matInput formControlName="title">
-                        @if (assemblyForm.get('title')?.errors?.['required']) {
-                        <mat-error>
-                            Este campo es obligatorio
-                        </mat-error>
-                        }
-                    </mat-form-field>
-
-                    <mat-form-field appearance="fill">
-                        <mat-label>Descripción</mat-label>
-                        <textarea matInput formControlName="description" required></textarea>
-                        @if (assemblyForm.get('description')?.errors?.['required']) {
-                        <mat-error>
-                            Este campo es obligatorio
-                        </mat-error>
-                        }
-                    </mat-form-field>
-
-                    <mat-form-field class="example-full-width">
-                        <mat-label>Fecha de la asamblea</mat-label>
-                        <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" formControlName="date">
-                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker touchUi #picker></mat-datepicker>
-                        @if (assemblyForm.get('date')?.errors?.['required']) {
-                        <mat-error>
-                            Este campo es obligatorio
-                        </mat-error>
-                        }
-                    </mat-form-field>
-
-                    <mat-form-field appearance="fill">
-                        <mat-label>Hora inicial (Hora de inicio de la asamblea)</mat-label>
-                        <input matInput type="time" formControlName="startTime" required>
-                        @if (assemblyForm.get('startTime')?.errors?.['required']) {
-                        <mat-error>
-                            Este campo es obligatorio
-                        </mat-error>
-                        }
-                    </mat-form-field>
-
-                    <button mat-stroked-button color="accent" (click)="openSurveySelector()">Seleccionar
-                        Encuestas</button>
-
-                    <button mat-raised-button color="primary" (click)="submitNewAssembly()" type="submit">Crear
-                        asamblea</button>
-                </form>
+@if (user?.role === 'ADMIN' && assemblyStatus !== 'STARTED') {
+    <section class="admin-content flex flex-col mx-auto px-8 py-5 pt-28">
+        <div class="flex flex-wrap -mx-2">
+            <div class="w-full md:w-1/2 px-2">
+                <div class="Create-assembly-content">
+                    <h1 class="text-cyan-950 font-bold text-2xl">Crear asamblea</h1>
+    
+                    <form [formGroup]="assemblyForm" class="flex flex-col w-full mt-8 gap-7">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Titulo de la asamblea</mat-label>
+                            <input matInput formControlName="title">
+                            @if (assemblyForm.get('title')?.errors?.['required']) {
+                            <mat-error>
+                                Este campo es obligatorio
+                            </mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <mat-form-field appearance="fill">
+                            <mat-label>Descripción</mat-label>
+                            <textarea matInput formControlName="description" required></textarea>
+                            @if (assemblyForm.get('description')?.errors?.['required']) {
+                            <mat-error>
+                                Este campo es obligatorio
+                            </mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Fecha de la asamblea</mat-label>
+                            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" formControlName="date">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #picker></mat-datepicker>
+                            @if (assemblyForm.get('date')?.errors?.['required']) {
+                            <mat-error>
+                                Este campo es obligatorio
+                            </mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <mat-form-field appearance="fill">
+                            <mat-label>Hora inicial (Hora de inicio de la asamblea)</mat-label>
+                            <input matInput type="time" formControlName="startTime" required>
+                            @if (assemblyForm.get('startTime')?.errors?.['required']) {
+                            <mat-error>
+                                Este campo es obligatorio
+                            </mat-error>
+                            }
+                        </mat-form-field>
+    
+                        <button mat-stroked-button color="accent" (click)="openSurveySelector()">Seleccionar
+                            Encuestas</button>
+    
+                        <button mat-raised-button color="primary" (click)="submitNewAssembly()" type="submit">Crear
+                            asamblea</button>
+                    </form>
+                </div>
             </div>
-        </div>
-
-        <div class="w-full md:w-1/2 px-2 md:mt-0 mt-20">
-            <div class="assembly-history-content">
-                <h2 class="text-cyan-950 font-bold text-2xl mb-4">Historial de asambleas</h2>
-                @for (assembly of assemblies; track assembly.id) {
-                <div class="mb-4 p-4 shadow-md rounded bg-white hover:bg-gray-300 cursor-pointer">
+    
+            <div class="w-full md:w-1/2 px-2 md:mt-0 mt-20">
+                <div class="assembly-history-content">
+                  <h2 class="text-cyan-950 font-bold text-2xl mb-4">Historial de asambleas</h2>
+                  <div *ngFor="let assembly of pagedAssemblies" class="mb-4 p-4 shadow-md rounded bg-white hover:bg-gray-300 cursor-pointer" (click)="handleAssemblyClick(assembly)">
                     <h3 class="text-lg font-bold">{{ assembly.title }}</h3>
                     <p>{{ assembly.description }}</p>
                     <p><strong>Fecha:</strong> {{ assembly.date }}</p>
                     <p><strong>Hora de inicio:</strong> {{ assembly.startTime }}</p>
-                    <p><strong>Estado:</strong> {{ assembly.status === "FINISHED" ? 'Finalizada' : 'Cancelada' }}</p>
+                    <p><strong>Estado:</strong> {{ assembly.status === 'FINISHED' ? 'Finalizada' : 'Cancelada' }}</p>
                     <p><strong>Encuestas asociadas:</strong>
-                        @for (survey of assembly.surveys; track survey.id) {
-                        {{survey.topic}}
-                        }
+                      <span *ngFor="let survey of assembly.surveys">{{ survey.topic }},</span>
                     </p>
+                  </div>
                 </div>
-                }
-            </div>
+                <mat-paginator [length]="assemblies.length"
+                               [pageSize]="pageSize"
+                               [pageSizeOptions]="[2,4,6]"
+                               (page)="onPageChange($event)"
+                               aria-label="Select page">
+                </mat-paginator>
+              </div>
+              
         </div>
-    </div>
-</section>
-}
-
-@if(user?.role === 'OWNER'){
-<section class="owner-content flex flex-col mx-auto px-8 py-5 pt-28">
-    <h1 class="text-cyan-950 font-bold text-2xl">Unirse a asamblea</h1>
-    <div class="join-assembly-content flex flex-col sm:flex-row h-4/5">
-        <div class="container-left w-full sm:w-1/2 bg-gray-100 flex items-center justify-center">
-            <div class="text-container max-w-[35rem] p-4 md:p-8 font-extrabold text-2xl">
-                Esta función aún se encuentra en desarrollo :) <br><br>
-                ¡Seguimos trabajando fuertemente para que tu puedas disfrutar ResiRed lo mas pronto posible!
+    </section>
+    }
+    
+    @if(user?.role === 'OWNER' && assemblyStatus !== 'STARTED'){
+    <section class="owner-content flex flex-col mx-auto px-8 py-5 pt-28">
+        <h1 class="text-cyan-950 font-bold text-2xl">Unirse a asamblea</h1>
+        <div class="bg-white shadow-md rounded-lg p-5">
+            <h2 class="text-xl font-semibold text-cyan-800">Próxima Asamblea</h2>
+            @if(upcomingAssembly?.isScheduled){
+            <div class="gap-2">
+              <p class="text-cyan-600"><strong>Título: </strong>{{ upcomingAssembly.title }}</p>
+              <p class="text-cyan-600"><strong>Fecha: </strong>{{ upcomingAssembly.date }}</p>
+              <p class="text-cyan-600"><strong>Hora de inicio: </strong>{{ upcomingAssembly.startTime }}</p>
+              <button (click)="joinAssembly()" class="bg-cyan-700 text-white text-base font-medium p-2 rounded-md hover:bg-cyan-900 shadow-lg mt-4">Unirse a la Asamblea</button>
             </div>
-        </div>
-        <div class="container-right w-full sm:w-1/2 bg-gray-200 flex items-center justify-center">
-            <div class="max-w-lg p-4 md:p-8">
-                <div class="img-container">
-                    <img src="assets/imgs/working-component.png" alt="working">
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-}
+        }
+    
+        @if(!upcomingAssembly?.isScheduled){<p class="text-cyan-600">No hay ninguna asamblea programada actualmente</p>}
+          </div>
+    </section>
+    }
+    
+    <router-outlet></router-outlet>
+    

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import {
   FormBuilder,
   FormControl,
@@ -11,11 +12,14 @@ import {
 import Swal from 'sweetalert2';
 import { ResetPasswordService } from '../../services/auth/reset-password.service';
 import { Router } from '@angular/router';
+import { UserDecodeToken } from '../../services/auth/userDecodeToken';
+import { LoginService } from '../../services/auth/login.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, MatTooltipModule],
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.css',
 })
@@ -26,12 +30,13 @@ export class ChangePasswordComponent implements OnInit {
   timerActive: boolean = false;
   remainingTime: number = 120; // 2 minutos
   timeDisplay: string = '';
+  interval: any;
 
   constructor(
-    private http: HttpClient,
     private fb: FormBuilder,
     private resetPasswordService: ResetPasswordService,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) {
     this.resetPasswordForm = this.fb.group({
       token: new FormControl('', [
@@ -62,11 +67,11 @@ export class ChangePasswordComponent implements OnInit {
   startRequestCodeTimer() {
     this.timerActive = true;
     this.remainingTime = 120;
-    const interval = setInterval(() => {
+    this.interval = setInterval(() => {
       this.remainingTime--;
       this.updateTimeDisplay();
       if (this.remainingTime <= 0) {
-        clearInterval(interval);
+        clearInterval(this.interval);
         this.timerActive = false;
         this.remainingTime = 120; // Reiniciar el contador
         this.timeDisplay = ''; // Limpiar el texto
@@ -83,6 +88,14 @@ export class ChangePasswordComponent implements OnInit {
   requestNewToken() {
     this.startRequestCodeTimer();
   }
+
+  goBack() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+    this.location.replaceState('');
+    this.router.navigate(['..']); // Navega a la página anterior
+  }  
 
   resetPassword() {
     if (this.resetPasswordForm.valid) {

@@ -13,7 +13,7 @@ export class ManageSurveysService {
 
   /** Surveys section */
   getSurveys(): Observable<SurveyData[]> {
-    return this.http.get<SurveyData[]>(`${environment.urlHost}survey/list/unassigned`)
+    return this.http.get<SurveyData[]>(`${environment.urlHost}survey/list/edit`)
     .pipe(
       catchError(this.handleError)
     );

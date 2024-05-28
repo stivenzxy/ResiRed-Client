@@ -1,0 +1,7 @@
+<section class="help-content flex flex-col mx-auto px-8 py-5 pt-28">
+    <h1 class="text-cyan-950 font-bold text-2xl">Preguntas Frecuentes</h1>
+    <div *ngFor="let faq of faqs" class="faq-item mb-8">
+        <h2 class="text-lg font-bold mb-2">{{ faq.question }}</h2>
+        <p class="whitespace-pre-line">{{ faq.answer }}</p>
+    </div>
+</section>

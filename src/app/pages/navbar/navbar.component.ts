@@ -68,6 +68,7 @@ export class NavbarComponent implements OnDestroy, OnInit {
   }
 
   switchProfileOption(itemProfile: INavbarData) {
+    this.toggleUserMenu();
     if (itemProfile.label === 'Perfil') {
       this.openProfileInfoDialog();
     } else if (itemProfile.label === 'Salir') {
@@ -99,13 +100,11 @@ export class NavbarComponent implements OnDestroy, OnInit {
   }
 
   onClick(event: MouseEvent) {
-    // Verifica si el click fue fuera del elemento del dropdown o del botón
-    if (!this.elementRef.nativeElement.contains(event.target)) {
-      this.isUserMenuOpen = false;
-      this.removeGlobalListener(); // Importante para evitar fugas de memoria
+    if (!this.elementRef.nativeElement.contains(event.target) && this.isUserMenuOpen) {
+      this.toggleUserMenu();
     }
   }
-
+  
   removeGlobalListener() {
     if (this.globalClickListener) {
       this.globalClickListener();

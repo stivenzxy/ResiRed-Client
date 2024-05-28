@@ -1,0 +1,36 @@
+<section class="flex flex-col mx-auto px-8 py-5 pt-28" *ngIf="assemblyStatus === 'FINISHED'">
+    <div class="max-w-5xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+      <h1 class="text-2xl font-bold mb-4">Resultados de la Asamblea</h1>
+      <h2 class="text-lg mb-2 font-semibold text-cyan-800">Asamblea: <span class="text-black font-medium">{{ finishedAssembly?.title }}</span></h2>
+      <p class="text-gray-600 mb-4">Visualiza los resultados de las votaciones</p>
+  
+      <div *ngIf="results.length > 0">
+        <div *ngIf="results[currentTopicIndex]">
+          <h3 class="text-base mb-2 font-semibold text-cyan-800">Encuesta: <span class="text-black font-medium">{{ results[currentTopicIndex].topic }}</span></h3>
+          <div *ngIf="results[currentTopicIndex].questions[currentQuestionIndex]" class="chart-container">
+            <!--<h4>{{ results[currentTopicIndex].questions[currentQuestionIndex].description }}</h4>-->
+            <canvas #chartCanvas></canvas>
+          </div>
+  
+          <div class="flex justify-between mt-6">
+            <button (click)="prevQuestion()" 
+                    [disabled]="currentTopicIndex === 0 && currentQuestionIndex === 0" 
+                    class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-lg">
+              Anterior
+            </button>
+            <button *ngIf="!isLastQuestion()"
+                    (click)="nextQuestion()" 
+                    class="bg-slate-700 hover:bg-slate-800 text-white py-2 px-4 rounded-lg">
+              Siguiente
+            </button>
+            <button *ngIf="isLastQuestion()"
+                    (click)="dashboard()" 
+                    class="bg-cyan-700 hover:bg-cyan-900 text-white py-2 px-4 rounded-lg">
+              Ir al inicio
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

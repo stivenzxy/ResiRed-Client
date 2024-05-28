@@ -4,3 +4,51 @@
     margin: 0;
     overflow:hidden;
 }
+
+table {
+    width: 100%;
+}
+
+.mat-mdc-table {
+    table-layout: fixed;
+}
+
+.mat-mdc-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+  
+td, th {
+    width: 25%;
+}
+
+.mat-sort-header-container {
+   justify-content: center;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto; 
+    overflow-y: hidden; 
+}
+
+
+table {
+    width: 100%;
+}
+
+.mat-mdc-paginator-container {
+    justify-content: center;
+}
+
+.mat-mdc-dialog-content {
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+@media (max-width: 600px) {
+    .table-container {
+        overflow-x: auto; 
+    }
+}
